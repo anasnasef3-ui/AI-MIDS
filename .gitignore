@@ -1,0 +1,69 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyd
+
+# SQLite Databases & temporary DB backups
+*.db
+*.sqlite
+*.sqlite3
+*.db-journal
+*.db-wal
+*.db-shm
+test_api_aimids.db
+aimids.db
+aimids_test_backup.db
+
+# Runtime Uploads & Previews (preserve directory structure)
+uploads/*.jpg
+uploads/*.jpeg
+uploads/*.png
+uploads/previews/*
+!uploads/.gitkeep
+!uploads/previews/.gitkeep
+
+# Large Datasets and Cloned Repositories
+Arc face/Dataset/
+Arc face/insightface-master/
+
+# Private User Test Photos
+Arc face/my_photos/
+my_photos/
+**/my_photos/
+OCR_Egyptian_ID-main/hoz.jpg
+OCR_Egyptian_ID-main/hoz1.jpg
+
+# Large Model Checkpoints & Pretrained Weights (>100MB limit on GitHub)
+Arc face/pretrained/backbone.pth
+Arc face/pretrained/*.pth
+
+# Installers and Zip Archives
+*.exe
+*.zip
+Arc face/pretrained/*.exe
+
+# Intermediate / Debug Outputs
+OCR_Egyptian_ID-main/raw_crops/
+OCR_Egyptian_ID-main/extracted_photo.png
+OCR_Egyptian_ID-main/debug_nid_crop.png
+OCR_Egyptian_ID-main/liveness_log.csv
+*.log
+
+# Keep required production YOLO models
+!OCR_Egyptian_ID-main/best.pt
+!OCR_Egyptian_ID-main/detect_odjects.pt
+!OCR_Egyptian_ID-main/detect_id_new.pt
+
+# Virtual environments
+.venv/
+.venv*/
+venv/
+env/
+ENV/
+
+# IDE & Editor configs
+.idea/
+.vscode/
+.agents/
+.gemini/

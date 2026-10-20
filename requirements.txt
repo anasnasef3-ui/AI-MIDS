@@ -1,0 +1,29 @@
+# AI-MIDS (AI Missing Identity Detection System) Dependencies
+# Python 3.10 recommended
+
+# FastAPI Backend & Server
+fastapi>=0.100.0
+uvicorn[standard]>=0.23.0
+python-multipart>=0.0.6
+pydantic>=2.0.0
+requests>=2.28.0
+
+# Computer Vision & Numerical Computing
+numpy>=1.24.0,<2.0.0
+opencv-python>=4.8.0
+pillow>=10.0.0
+
+# Vector Similarity Search
+faiss-cpu>=1.7.4
+
+# Face Recognition (ArcFace / AntelopeV2)
+insightface>=0.7.3
+onnxruntime>=1.16.0
+
+# Egyptian ID OCR & Detection (YOLOv8)
+ultralytics>=8.0.0
+torch>=2.0.0
+torchvision>=0.15.0
+
+# Anti-Spoofing Liveness Detection (MiniFASNet)
+uniface>=0.6.0
