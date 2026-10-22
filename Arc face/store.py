@@ -48,13 +48,21 @@ class FaceStore:
         """)
         self.index = faiss.IndexIDMap(faiss.IndexFlatIP(DIM))
         self._centroids = {}
+        self._centroid_pids = None
+        self._centroid_matrix = None
+        self._face_to_person = {}
         self._load()
 
     # ------------------------------------------------------------------ internals
+    def _invalidate_centroid_cache(self):
+        self._centroid_pids = None
+        self._centroid_matrix = None
+
     def _update_centroid(self, person_id):
         rows = self.db.execute("SELECT embedding FROM faces WHERE person_id=?", (person_id,)).fetchall()
         if not rows:
             self._centroids.pop(person_id, None)
+            self._invalidate_centroid_cache()
             return
         vecs = np.stack([np.frombuffer(r[0], dtype=np.float32) for r in rows])
         mean_v = np.mean(vecs, axis=0)
@@ -63,22 +71,27 @@ class FaceStore:
             self._centroids[person_id] = (mean_v / norm).astype(np.float32)
         else:
             self._centroids[person_id] = mean_v.astype(np.float32)
+        self._invalidate_centroid_cache()
 
     def _load(self):
-        rows = self.db.execute("SELECT id, embedding FROM faces").fetchall()
+        rows = self.db.execute("SELECT id, person_id, embedding FROM faces").fetchall()
         if rows:
             ids = np.array([r[0] for r in rows], dtype=np.int64)
-            vecs = np.stack([np.frombuffer(r[1], dtype=np.float32) for r in rows])
+            vecs = np.stack([np.frombuffer(r[2], dtype=np.float32) for r in rows])
             self.index.add_with_ids(vecs, ids)
+            self._face_to_person = {r[0]: r[1] for r in rows}
         pids = [r[0] for r in self.db.execute("SELECT DISTINCT person_id FROM faces").fetchall()]
         for pid in pids:
             self._update_centroid(pid)
+        self._invalidate_centroid_cache()
 
     @staticmethod
     def _norm(v):
         v = np.asarray(v, dtype=np.float32).reshape(-1)
         if v.shape[0] != DIM:
             raise ValueError(f"embedding must have {DIM} numbers, got {v.shape[0]}")
+        if not np.all(np.isfinite(v)) or np.linalg.norm(v) < 1e-8:
+            raise ValueError("invalid face embedding (zero-length or non-finite vector)")
         return v / np.linalg.norm(v)
 
     # ------------------------------------------------------------------ write
@@ -99,6 +112,7 @@ class FaceStore:
             self.db.commit()
             fid = cur.lastrowid
             self.index.add_with_ids(v[None, :], np.array([fid], dtype=np.int64))
+            self._face_to_person[fid] = person_id
             self._update_centroid(person_id)
             return fid
 
@@ -107,10 +121,13 @@ class FaceStore:
             fids = [r[0] for r in self.db.execute("SELECT id FROM faces WHERE person_id=?", (person_id,))]
             if fids:
                 self.index.remove_ids(np.array(fids, dtype=np.int64))
+                for fid in fids:
+                    self._face_to_person.pop(fid, None)
             self.db.execute("DELETE FROM faces WHERE person_id=?", (person_id,))
             self.db.execute("DELETE FROM persons WHERE id=?", (person_id,))
             self.db.commit()
             self._centroids.pop(person_id, None)
+            self._invalidate_centroid_cache()
 
     # ------------------------------------------------------------------ read
     def search(self, embedding, k=10, min_sim=-1.0):
@@ -121,74 +138,112 @@ class FaceStore:
             kk = min(self.index.ntotal, max(k * 5, 50))  # several photos per person -> look deeper, then dedupe
             sims, fids = self.index.search(q[None, :], kk)
             pairs = [(int(f), float(s)) for f, s in zip(fids[0], sims[0]) if f != -1]
-            if pairs:
-                marks = ",".join("?" * len(pairs))
-                info = {r[0]: r for r in self.db.execute(
-                    f"SELECT f.id, f.person_id, f.photo_path, f.age, p.name, p.notes "
-                    f"FROM faces f JOIN persons p ON p.id = f.person_id WHERE f.id IN ({marks})",
-                    [f for f, _ in pairs])}
+
+            # Ensure any face IDs from FAISS are in self._face_to_person
+            missing_fids = [f for f, _ in pairs if f not in self._face_to_person]
+            if missing_fids:
+                marks = ",".join("?" * len(missing_fids))
+                for r in self.db.execute(f"SELECT id, person_id FROM faces WHERE id IN ({marks})", missing_fids):
+                    self._face_to_person[r[0]] = r[1]
+
+            faiss_person_best = {}
+            for fid, sim in pairs:
+                pid = self._face_to_person.get(fid)
+                if pid is not None and pid not in faiss_person_best:
+                    faiss_person_best[pid] = (sim, fid)
+
+            # Evaluate centroid similarity for all persons via single numpy matmul
+            if self._centroid_matrix is None or self._centroid_pids is None:
+                if self._centroids:
+                    pids = list(self._centroids.keys())
+                    self._centroid_pids = np.array(pids, dtype=np.int64)
+                    self._centroid_matrix = np.stack([self._centroids[p] for p in pids])
+                else:
+                    self._centroid_pids = np.array([], dtype=np.int64)
+                    self._centroid_matrix = np.empty((0, DIM), dtype=np.float32)
+
+            if len(self._centroid_pids) > 0:
+                centroid_sims_arr = np.dot(self._centroid_matrix, q)
+                centroid_sims = {int(p): float(s) for p, s in zip(self._centroid_pids, centroid_sims_arr)}
             else:
-                info = {}
+                centroid_sims = {}
 
-            person_best = {}
-            for fid, sim in pairs:  # pairs are sorted best-first, so the first hit per person is their best
-                if fid in info:
-                    fid_, pid, path, age, name, notes = info[fid]
-                    if pid not in person_best:
-                        person_best[pid] = {
-                            "face_id": fid,
-                            "person_id": pid,
-                            "name": name,
-                            "notes": notes,
-                            "photo_path": path,
-                            "age": age,
-                            "best_photo_sim": sim,
-                        }
+            # Final per-person score = max(best_photo_sim from FAISS hits (or -1.0 if none), centroid_sim)
+            # Maintain exact candidate list ordering: FAISS hits in order, then missing persons
+            candidate_pids = []
+            seen_pids = set()
+            for fid, _ in pairs:
+                pid = self._face_to_person.get(fid)
+                if pid is not None and pid not in seen_pids:
+                    seen_pids.add(pid)
+                    candidate_pids.append(pid)
 
-            # Evaluate centroid similarity for all persons
-            centroid_sims = {pid: float(np.dot(q, c_vec)) for pid, c_vec in self._centroids.items()}
-
-            # Any person whose centroid similarity >= min_sim not already in pairs
-            missing_pids = [pid for pid, c_sim in centroid_sims.items() if pid not in person_best and c_sim >= min_sim]
-            if missing_pids:
-                m_marks = ",".join("?" * len(missing_pids))
-                rows = self.db.execute(
-                    f"SELECT f.id, f.person_id, f.photo_path, f.age, p.name, p.notes "
-                    f"FROM faces f JOIN persons p ON p.id = f.person_id "
-                    f"WHERE f.person_id IN ({m_marks}) ORDER BY f.id DESC", missing_pids
-                ).fetchall()
-                for r in rows:
-                    fid_, pid, path, age, name, notes = r
-                    if pid not in person_best:
-                        person_best[pid] = {
-                            "face_id": fid_,
-                            "person_id": pid,
-                            "name": name,
-                            "notes": notes,
-                            "photo_path": path,
-                            "age": age,
-                            "best_photo_sim": -1.0,
-                        }
+            for pid in self._centroids.keys():
+                if pid not in seen_pids:
+                    seen_pids.add(pid)
+                    candidate_pids.append(pid)
 
             candidates = []
-            for pid, pdata in person_best.items():
+            for pid in candidate_pids:
+                best_photo_sim, best_fid = faiss_person_best.get(pid, (-1.0, None))
                 c_sim = centroid_sims.get(pid, -1.0)
-                sim = max(pdata["best_photo_sim"], c_sim)
+                sim = max(best_photo_sim, c_sim)
                 if sim >= min_sim:
                     tier = "STRONG" if sim >= STRONG else ("possible" if sim >= POSSIBLE else "weak")
                     candidates.append({
-                        "face_id": pdata["face_id"],
                         "person_id": pid,
-                        "name": pdata["name"],
-                        "notes": pdata["notes"],
                         "similarity": round(sim, 4),
                         "tier": tier,
-                        "photo_path": pdata["photo_path"],
-                        "age": pdata["age"],
+                        "faiss_fid": best_fid,
                     })
 
             candidates.sort(key=lambda x: x["similarity"], reverse=True)
-            return candidates[:k]
+            top_k = candidates[:k]
+            if not top_k:
+                return []
+
+            # Query SQLite ONLY for those top-k persons' info and a representative face
+            needed_fids = [c["faiss_fid"] for c in top_k if c["faiss_fid"] is not None]
+            needed_pids_no_fid = [c["person_id"] for c in top_k if c["faiss_fid"] is None]
+
+            info_by_pid = {}
+            if needed_fids:
+                marks = ",".join("?" * len(needed_fids))
+                for r in self.db.execute(
+                    f"SELECT f.id, f.person_id, f.photo_path, f.age, p.name, p.notes "
+                    f"FROM faces f JOIN persons p ON p.id = f.person_id WHERE f.id IN ({marks})",
+                    needed_fids
+                ):
+                    info_by_pid[r[1]] = (r[0], r[2], r[3], r[4], r[5])
+
+            if needed_pids_no_fid:
+                marks = ",".join("?" * len(needed_pids_no_fid))
+                for r in self.db.execute(
+                    f"SELECT f.id, f.person_id, f.photo_path, f.age, p.name, p.notes "
+                    f"FROM faces f JOIN persons p ON p.id = f.person_id "
+                    f"WHERE f.person_id IN ({marks}) ORDER BY f.id DESC",
+                    needed_pids_no_fid
+                ):
+                    pid = r[1]
+                    if pid not in info_by_pid:
+                        info_by_pid[pid] = (r[0], r[2], r[3], r[4], r[5])
+
+            result = []
+            for c in top_k:
+                pid = c["person_id"]
+                if pid in info_by_pid:
+                    fid, path, age, name, notes = info_by_pid[pid]
+                    result.append({
+                        "face_id": fid,
+                        "person_id": pid,
+                        "name": name,
+                        "notes": notes,
+                        "similarity": c["similarity"],
+                        "tier": c["tier"],
+                        "photo_path": path,
+                        "age": age,
+                    })
+            return result
 
     def stats(self):
         with self.lock:

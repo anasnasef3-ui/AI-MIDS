@@ -17,7 +17,7 @@
 * **Vector Index & Storage (`store.py`)**:
   * **SQLite (`aimids.db`)**: Single source of truth for persons, metadata, and embeddings.
   * **FAISS (`IndexIDMap(IndexFlatIP)`)**: In-memory vector search engine for sub-millisecond similarity matching.
-  * **Multi-Photo Centroid Fusion**: Maintains normalized 512-d centroid embeddings per person across all registered photos. In searches, candidates are scored using $\max(\text{best\_individual\_photo\_sim}, \text{centroid\_sim})$ for maximum cross-age robustness.
+  * **Multi-Photo Centroid Fusion**: Maintains normalized 512-d centroid embeddings per person across all registered photos. In searches, candidates are scored using $\max(\text{best\_individual\_photo\_sim}, \text{centroid\_sim})$ for maximum cross-age robustness. All persons are scored in memory with one matrix multiply, and SQLite is queried only for the final top-k (fast at thousands of persons). Invalid embeddings (zero-length / NaN) are rejected and the API returns HTTP 400.
   * **Search Philosophy**: Always returns a ranked top-10 list of candidate matches for a human investigator to inspect, rather than silently dropping true matches with rigid score cutoffs.
   * **Confidence Tiers**:
     * `STRONG`: Cosine similarity $\ge 0.36$ (high-confidence lead).
@@ -97,6 +97,13 @@ cd "D:\GRAD\Project\Main files"
 python test_api_endpoints.py
 ```
 
+### 10-Fold Cross-Age Verification Benchmark
+Evaluates true accept rates (TAR @ FAR) and verifies AI-MIDS confidence tiers across 30+ year age progressions:
+```cmd
+cd "D:\GRAD\Project\Main files\Arc face"
+python bench_verify.py --dataset agedb30 --engine antelopev2 --tta --limit 200
+```
+
 ### Standalone ID Verification & Live Selfie
 Runs the standalone webcam-guided verification script (supports default Buffalo_L or AntelopeV2):
 ```cmd
@@ -114,19 +121,22 @@ python id_verify.py ID.jpg --antelopev2
 D:\GRAD\Project\
 ├── .venv/                         # Python 3.10 virtual environment
 ├── dev_env.bat                    # Environment activator
-├── README.md                      # Project root documentation
-├── Main files/
-│   ├── README.md                  # Main documentation
-│   ├── api.py                     # FastAPI backend server (local demo)
-│   ├── test_api_endpoints.py      # Automated API integration test suite
-│   ├── uploads/                   # Uploaded registration photos (.jpg)
-│   │   └── previews/              # Temporary group preview images (1h TTL)
-│   ├── Arc face/
-│   │   ├── face_engine.py         # ArcFace feature extraction engine
-│   │   ├── store.py               # SQLite + FAISS vector storage (3 tiers)
-│   │   ├── photo_quality.py       # Quality gatekeeper & numbered box drawer
-│   │   ├── test_realistic_search.py # Aging benchmark test script
-│   │   └── my_photos/             # Reference photos
+├── AGENTS.md                      # Auto-loaded workspace rules & benchmark records
+└── Main files/
+    ├── README.md                  # Main documentation & setup guide
+    ├── api.py                     # FastAPI backend server (local demo)
+    ├── test_api_endpoints.py      # Automated API integration test suite
+    ├── uploads/                   # Uploaded registration photos (.jpg)
+    │   └── previews/              # Temporary group preview images (1h TTL)
+    ├── Arc face/
+    │   ├── face_engine.py         # ArcFace buffalo_l feature engine
+    │   ├── face_engine_antelopev2.py # Glint360K ResNet-100 engine (Flip-TTA)
+    │   ├── store.py               # SQLite + FAISS vector storage (3 tiers)
+    │   ├── photo_quality.py       # Quality gatekeeper & numbered box drawer
+    │   ├── bench_verify.py        # 10-fold verification benchmark (TAR@FAR)
+    │   ├── bench_datasets.py      # Dataset loaders for AgeDB-30, CACD-VS, CALFW
+    │   ├── test_realistic_search.py # Aging benchmark test script
+    │   └── my_photos/             # Reference photos
 │   └── OCR_Egyptian_ID-main/
 │       ├── utils.py               # Egyptian ID card reader & decoder
 │       ├── id_verify.py           # Standalone ID vs Selfie verification

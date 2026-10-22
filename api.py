@@ -294,12 +294,19 @@ async def add_person_photo(
     cv2.imencode(".jpg", img)[1].tofile(saved_path)
 
     # Add embedding to FAISS + SQLite
-    fid = store.add_photo(
-        person_id=person_id,
-        embedding=q["face"]["embedding"],
-        photo_path=saved_path,
-        age=age
-    )
+    try:
+        fid = store.add_photo(
+            person_id=person_id,
+            embedding=q["face"]["embedding"],
+            photo_path=saved_path,
+            age=age
+        )
+    except ValueError as e:
+        try:
+            os.remove(saved_path)  # don't leave an orphan photo on disk
+        except OSError:
+            pass
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(e))
 
     return {
         "status": q["status"],
@@ -352,7 +359,10 @@ async def search_persons(
 
     results = []
     for idx, f in enumerate(faces):
-        hits = await run_in_threadpool(store.search, f["embedding"], k, min_sim)
+        try:
+            hits = await run_in_threadpool(store.search, f["embedding"], k, min_sim)
+        except ValueError as e:
+            raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(e))
         formatted_hits = []
         for h in hits:
             formatted_hits.append({

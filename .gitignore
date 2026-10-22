@@ -41,6 +41,7 @@ Arc face/pretrained/*.pth
 # Installers and Zip Archives
 *.exe
 *.zip
+*.npz
 Arc face/pretrained/*.exe
 
 # Intermediate / Debug Outputs
