@@ -60,6 +60,7 @@ OCR_Egyptian_ID-main/liveness_log.csv
 demo_probes/
 demo_results/
 demo_crossage_work/
+demo_all5_work/
 demo_results_calibrated/
 
 # Keep required production YOLO models
