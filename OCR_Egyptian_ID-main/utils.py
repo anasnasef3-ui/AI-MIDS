@@ -106,7 +106,13 @@ def detect_national_id(cropped_image):
 
 # --------------------------------------------------------------------------- decoding
 def decode_egyptian_id(id_number):
-    """Never raises. Invalid parts come back as None, with an explanation in 'Problems'."""
+    """Never raises. Invalid parts come back as None, with an explanation in 'Problems'.
+
+    Validation is structural: 14 digits, century digit, a governorate code that exists, and a real
+    calendar date that is not in the future. The 14th digit is the registry's check digit, but its
+    algorithm is not publicly documented (Wikipedia calls it optional, and the open-source
+    validators that claim a rule contradict each other), so it is NOT verified here.
+    """
     out = {'Birth Date': None, 'Governorate': None, 'Gender': None, 'Problems': []}
     if not (id_number.isdigit() and len(id_number) == 14):
         out['Problems'].append(f"national ID is '{id_number}' - expected exactly 14 digits")
@@ -141,7 +147,10 @@ def expand_bbox_height(bbox, scale=1.2, image_shape=None):
     height = y2 - y1
     center_y = y1 + height // 2
     new_height = int(height * scale)
-    return [x1, max(center_y - new_height // 2, 0), x2, min(center_y + new_height // 2, image_shape[0])]
+    bottom = center_y + new_height // 2
+    if image_shape is not None:
+        bottom = min(bottom, image_shape[0])
+    return [x1, max(center_y - new_height // 2, 0), x2, bottom]
 
 
 # --------------------------------------------------------------------------- reading a card

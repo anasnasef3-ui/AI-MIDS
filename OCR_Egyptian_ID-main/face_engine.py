@@ -20,6 +20,8 @@ from insightface.app import FaceAnalysis
 
 
 class FaceEngine:
+    model_name = "buffalo_l"   # tags every embedding this engine produces, so the store never mixes models
+
     def __init__(self, insightface_home="~/.insightface", use_gpu=True, det_size=(640, 640)):
         providers = ["CUDAExecutionProvider", "CPUExecutionProvider"] if use_gpu else ["CPUExecutionProvider"]
         self.app = FaceAnalysis(name="buffalo_l", root=insightface_home,

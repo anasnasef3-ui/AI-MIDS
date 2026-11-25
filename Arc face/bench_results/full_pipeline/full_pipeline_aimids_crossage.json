@@ -1,0 +1,821 @@
+{
+  "provenance": {
+    "timestamp_utc": "2026-11-25T01:45:36.834001+00:00",
+    "cli_args": {
+      "engines": "aimids_crossage,antelopev2,fromscratchv2",
+      "bootstrap": 1000,
+      "verify_sample": 24,
+      "seed": 0,
+      "cpu": false,
+      "out": "Arc face/bench_results/full_pipeline",
+      "worker_api_smoke": null,
+      "worker_stage3_http": null
+    },
+    "lag_cohort_size": 1200,
+    "lag_cohort_sha256": "b1c5c01bd4cd3bc70892b4b5e5aebba65736f9350191a6bcbff79226bcb1a544",
+    "lag_scratch_cohort_sha256": "ff9d54cf2615d51b69f61f23d1068cca600c20ddf187d5e05974c96501dba902",
+    "plan_meta": {
+      "cacd_manifest": {
+        "zip_path": "D:\\GRAD\\Project\\training\\custom_model-20261114T121928Z-1-001.zip",
+        "member_name": "custom_model/split_manifest_v2.csv.gz",
+        "splits_seen": [
+          "train",
+          "validation"
+        ],
+        "per_split_identities": {
+          "train": 1251,
+          "validation": 139
+        },
+        "total_identities": 1390
+      },
+      "calfw_protocol": {
+        "root": "D:\\GRAD\\Assets\\calfw",
+        "description": "Official CALFW 10-Fold Protocol (pairs_CALFW.txt)",
+        "total_pairs": 6000,
+        "unique_images": 7156
+      },
+      "plan_manifest_sha256": "a8c070eab5774cc06e471a8a54a8816929f7742538bdb2c8aaacb061ec5939a0"
+    },
+    "plan_counts": {
+      "datasets": {
+        "fgnet": {
+          "gallery_ids": 74,
+          "gallery_photos": 447,
+          "probes": 463
+        },
+        "ecaf": {
+          "gallery_ids": 641,
+          "gallery_photos": 1701,
+          "probes": 3752
+        },
+        "caf": {
+          "gallery_ids": 257,
+          "gallery_photos": 794,
+          "probes": 1207
+        },
+        "agedb": {
+          "gallery_ids": 466,
+          "gallery_photos": 1828,
+          "probes": 924,
+          "gallery_only_distractor_ids": 2
+        },
+        "calfw": {
+          "gallery_ids": 1368,
+          "gallery_photos": 1837,
+          "probes": 1368
+        }
+      },
+      "total_gallery_ids": 2806,
+      "total_gallery_photos": 6607,
+      "total_mated_probes": 7714,
+      "qmf_calib_ids": 474,
+      "qmf_fit_pairs": 744,
+      "calib_nonmate_ids": 350,
+      "stranger_test_ids": 200,
+      "cohort_excluded_ids": 604,
+      "cacd_excluded_ids": 1390
+    },
+    "disjointness_verified": true,
+    "engine_providers": {
+      "aimids_crossage": {
+        "app.recognition": [
+          "CUDAExecutionProvider",
+          "CPUExecutionProvider"
+        ],
+        "app.detection": [
+          "CUDAExecutionProvider",
+          "CPUExecutionProvider"
+        ],
+        "antelope.recognition": [
+          "CUDAExecutionProvider",
+          "CPUExecutionProvider"
+        ],
+        "antelope.detection": [
+          "CUDAExecutionProvider",
+          "CPUExecutionProvider"
+        ],
+        "adaface.ort_session": [
+          "CUDAExecutionProvider",
+          "CPUExecutionProvider"
+        ]
+      },
+      "antelopev2": {
+        "app.recognition": [
+          "CUDAExecutionProvider",
+          "CPUExecutionProvider"
+        ],
+        "app.detection": [
+          "CUDAExecutionProvider",
+          "CPUExecutionProvider"
+        ]
+      },
+      "fromscratchv2": {
+        "app.detection": [
+          "CUDAExecutionProvider",
+          "CPUExecutionProvider"
+        ],
+        "ort_session": [
+          "CUDAExecutionProvider",
+          "CPUExecutionProvider"
+        ]
+      }
+    },
+    "actual_gpu": {
+      "aimids_crossage": true,
+      "antelopev2": true,
+      "fromscratchv2": true
+    },
+    "cache_integrity": {
+      "aimids_crossage": {
+        "n_checked": 24,
+        "min_cos": 0.9999999403953552,
+        "mean_cos": 1.0000000099341075,
+        "offending": []
+      },
+      "antelopev2": {
+        "n_checked": 24,
+        "min_cos": 0.9999998211860657,
+        "mean_cos": 1.0000000298023224,
+        "offending": []
+      },
+      "fromscratchv2": {
+        "n_checked": 24,
+        "min_cos": 1.0,
+        "mean_cos": 1.00000003973643,
+        "offending": []
+      }
+    },
+    "matched_calibration_fit": {
+      "aimids_crossage": {
+        "fit_trials": 744,
+        "nonmate_calib_probes": 350,
+        "gallery_n_max": 2806,
+        "proj_k": 5,
+        "photo_hybrid_weight": 0.35,
+        "cohort_size": 600,
+        "fit_diagnostics": {
+          "cllr": 0.26385752377305627,
+          "cllr_min": 0.23197208043317874,
+          "cllr_cal": 0.03188544333987753,
+          "brier": 0.05683349552475164,
+          "ece": 0.03693942423001555
+        },
+        "openset_n_grid": [
+          1,
+          50,
+          80,
+          150,
+          300,
+          600,
+          1000,
+          2000,
+          2806
+        ],
+        "tau_strong_max_n": 2.0563,
+        "tau_possible_max_n": 0.7503
+      },
+      "antelopev2": {
+        "fit_trials": 744,
+        "nonmate_calib_probes": 350,
+        "gallery_n_max": 2806,
+        "proj_k": 5,
+        "photo_hybrid_weight": 0.35,
+        "cohort_size": 600,
+        "fit_diagnostics": {
+          "cllr": 0.26441806017570063,
+          "cllr_min": 0.22939855337076415,
+          "cllr_cal": 0.035019506804936484,
+          "brier": 0.0567385148225714,
+          "ece": 0.04380512417157726
+        },
+        "openset_n_grid": [
+          1,
+          50,
+          80,
+          150,
+          300,
+          600,
+          1000,
+          2000,
+          2806
+        ],
+        "tau_strong_max_n": 2.2485,
+        "tau_possible_max_n": 0.8925
+      },
+      "fromscratchv2": {
+        "fit_trials": 744,
+        "nonmate_calib_probes": 350,
+        "gallery_n_max": 2806,
+        "proj_k": 5,
+        "photo_hybrid_weight": 0.35,
+        "cohort_size": 600,
+        "fit_diagnostics": {
+          "cllr": 0.29643008759599593,
+          "cllr_min": 0.2446758580983051,
+          "cllr_cal": 0.05175422949769082,
+          "brier": 0.06241013345088106,
+          "ece": 0.05683304370804653
+        },
+        "openset_n_grid": [
+          1,
+          50,
+          80,
+          150,
+          300,
+          600,
+          1000,
+          2000,
+          2806
+        ],
+        "tau_strong_max_n": 2.4291,
+        "tau_possible_max_n": 1.1387,
+        "saved_npz": "D:\\GRAD\\Project\\Main files\\Arc face\\pretrained\\calib_aimids_scratch_ir50_crossage.npz",
+        "saved_json": "D:\\GRAD\\Project\\Main files\\Arc face\\pretrained\\calib_aimids_scratch_ir50_crossage.json"
+      }
+    },
+    "stage3_probes": [
+      {
+        "bucket": "fgnet",
+        "dataset": "fgnet",
+        "file": "001A14.JPG"
+      },
+      {
+        "bucket": "fgnet",
+        "dataset": "fgnet",
+        "file": "001A16.JPG"
+      },
+      {
+        "bucket": "fgnet",
+        "dataset": "fgnet",
+        "file": "001A18.JPG"
+      },
+      {
+        "bucket": "fgnet",
+        "dataset": "fgnet",
+        "file": "001A19.JPG"
+      },
+      {
+        "bucket": "fgnet",
+        "dataset": "fgnet",
+        "file": "001A22.JPG"
+      },
+      {
+        "bucket": "fgnet",
+        "dataset": "fgnet",
+        "file": "001A28.JPG"
+      },
+      {
+        "bucket": "ecaf",
+        "dataset": "ecaf",
+        "file": "Adam_Ant_adult_000.png"
+      },
+      {
+        "bucket": "ecaf",
+        "dataset": "ecaf",
+        "file": "Adam_Ant_adult_001.png"
+      },
+      {
+        "bucket": "ecaf",
+        "dataset": "ecaf",
+        "file": "Adam_Ant_adult_002.png"
+      },
+      {
+        "bucket": "ecaf",
+        "dataset": "ecaf",
+        "file": "Adam_Ant_adult_003.png"
+      },
+      {
+        "bucket": "ecaf",
+        "dataset": "ecaf",
+        "file": "Adam_Ant_adult_004.png"
+      },
+      {
+        "bucket": "ecaf",
+        "dataset": "ecaf",
+        "file": "Adam_Ant_adult_005.png"
+      },
+      {
+        "bucket": "agedb",
+        "dataset": "agedb",
+        "file": "2357_AbeVigoda_92_m.jpg"
+      },
+      {
+        "bucket": "agedb",
+        "dataset": "agedb",
+        "file": "2358_AbeVigoda_93_m.jpg"
+      },
+      {
+        "bucket": "agedb",
+        "dataset": "agedb",
+        "file": "780_AdolfHitlerr_55_m.jpg"
+      },
+      {
+        "bucket": "agedb",
+        "dataset": "agedb",
+        "file": "781_AdolfHitlerr_55_m.jpg"
+      },
+      {
+        "bucket": "agedb",
+        "dataset": "agedb",
+        "file": "787_akistsoxatzopoulos_74_m.jpg"
+      },
+      {
+        "bucket": "agedb",
+        "dataset": "agedb",
+        "file": "797_akistsoxatzopoulos_74_m.jpg"
+      },
+      {
+        "bucket": "calfw",
+        "dataset": "calfw",
+        "file": "Aaron_Eckhart_0002.jpg"
+      },
+      {
+        "bucket": "calfw",
+        "dataset": "calfw",
+        "file": "Aaron_Guiel_0002.jpg"
+      },
+      {
+        "bucket": "calfw",
+        "dataset": "calfw",
+        "file": "Aaron_Peirsol_0004.jpg"
+      },
+      {
+        "bucket": "calfw",
+        "dataset": "calfw",
+        "file": "Aaron_Tippin_0002.jpg"
+      },
+      {
+        "bucket": "calfw",
+        "dataset": "calfw",
+        "file": "Abdel_Aziz_Al-Hakim_0002.jpg"
+      },
+      {
+        "bucket": "calfw",
+        "dataset": "calfw",
+        "file": "Abraham_Foxman_0004.jpg"
+      },
+      {
+        "bucket": "stranger",
+        "dataset": "stranger",
+        "file": "Abdel_Nasser_Assidi_0003.jpg"
+      },
+      {
+        "bucket": "stranger",
+        "dataset": "stranger",
+        "file": "Ahmed_Chalabi_0004.jpg"
+      },
+      {
+        "bucket": "stranger",
+        "dataset": "stranger",
+        "file": "Ahmet_Demir_0002.jpg"
+      },
+      {
+        "bucket": "stranger",
+        "dataset": "stranger",
+        "file": "Aitor_Gonzalez_0002.jpg"
+      },
+      {
+        "bucket": "stranger",
+        "dataset": "stranger",
+        "file": "Alanna_Ubach_0002.jpg"
+      },
+      {
+        "bucket": "stranger",
+        "dataset": "stranger",
+        "file": "Alexander_Rumyantsev_0002.jpg"
+      }
+    ]
+  },
+  "runtime_sec": 1008.9041080474854,
+  "stage1_api_smoke": {
+    "engine_key": "aimids_crossage",
+    "engine_name": "aimids_crossage",
+    "passed": 30,
+    "total": 30,
+    "all_passed": true,
+    "calibration": "calibrated",
+    "gpu": true,
+    "tta": true,
+    "asnorm_active": true,
+    "failed_checks": [],
+    "exit_code": 0
+  },
+  "stage2_unified_eval": {
+    "engine_key": "aimids_crossage",
+    "engine_name": "aimids_crossage",
+    "caf_in_train_set": false,
+    "cross_id_byte_collisions": 2,
+    "modes": {
+      "matched_calibrated": {
+        "calibrated_ready": true,
+        "caf_in_train_set": false,
+        "gallery_ids_total": 2806,
+        "gallery_ids_enrolled": 2806,
+        "fair_4_datasets_no_caf": {
+          "probes": 6507,
+          "n_failed_probe_detect": 0,
+          "n_exact_dup_excluded": 0,
+          "n_near_dup_excluded": 0,
+          "rank1": 80.39034885507914,
+          "top5": 89.303826648225,
+          "top10": 91.59366835715383,
+          "strong": 46.94943906562164,
+          "possible_plus": 69.57123098201936,
+          "rank1_ci95": [
+            78.30411425542306,
+            82.50978992627849
+          ],
+          "top10_ci95": [
+            90.18584311704323,
+            92.81882200347484
+          ],
+          "top1_centroid_share_pct": 64.82,
+          "top1_photo_share_pct": 35.18,
+          "r1_centroid_share_pct": 66.13
+        },
+        "all_5_datasets": {
+          "probes": 7714,
+          "n_failed_probe_detect": 0,
+          "n_exact_dup_excluded": 0,
+          "n_near_dup_excluded": 0,
+          "rank1": 79.46590614467203,
+          "top5": 88.22919367383977,
+          "top10": 90.4200155561317,
+          "strong": 45.73502722323049,
+          "possible_plus": 68.8877365828364,
+          "rank1_ci95": [
+            77.40377967557859,
+            81.45156161889722
+          ],
+          "top10_ci95": [
+            89.01196589738518,
+            91.71988566785976
+          ],
+          "top1_centroid_share_pct": 61.33,
+          "top1_photo_share_pct": 38.67,
+          "r1_centroid_share_pct": 61.89,
+          "caf_in_train_set": false
+        },
+        "per_dataset": {
+          "fgnet": {
+            "probes": 463,
+            "n_failed_probe_detect": 0,
+            "n_exact_dup_excluded": 0,
+            "n_near_dup_excluded": 0,
+            "rank1": 93.73650107991361,
+            "top5": 95.68034557235421,
+            "top10": 97.40820734341253,
+            "strong": 76.02591792656588,
+            "possible_plus": 89.8488120950324,
+            "rank1_ci95": [
+              88.9393932090315,
+              97.88162882546739
+            ],
+            "top10_ci95": [
+              94.50788820566905,
+              99.57994112405878
+            ],
+            "top1_centroid_share_pct": 27.43,
+            "top1_photo_share_pct": 72.57,
+            "r1_centroid_share_pct": 24.42,
+            "age_gap_buckets": {
+              "<10": {
+                "probes": 227,
+                "rank1": 99.11894273127754,
+                "top5": 99.55947136563876,
+                "top10": 99.55947136563876,
+                "strong": 91.18942731277532
+              },
+              "10-19": {
+                "probes": 132,
+                "rank1": 97.72727272727273,
+                "top5": 99.24242424242425,
+                "top10": 99.24242424242425,
+                "strong": 72.72727272727273
+              },
+              ">=20": {
+                "probes": 104,
+                "rank1": 76.92307692307693,
+                "top5": 82.6923076923077,
+                "top10": 90.38461538461539,
+                "strong": 47.11538461538461
+              }
+            }
+          },
+          "ecaf": {
+            "probes": 3752,
+            "n_failed_probe_detect": 0,
+            "n_exact_dup_excluded": 0,
+            "n_near_dup_excluded": 0,
+            "rank1": 70.41577825159915,
+            "top5": 85.07462686567165,
+            "top10": 88.77931769722814,
+            "strong": 18.816631130063964,
+            "possible_plus": 52.85181236673774,
+            "rank1_ci95": [
+              67.3694593644812,
+              73.59653529226435
+            ],
+            "top10_ci95": [
+              86.6676047489589,
+              90.71986024033438
+            ],
+            "top1_centroid_share_pct": 64.66,
+            "top1_photo_share_pct": 35.34,
+            "r1_centroid_share_pct": 67.22
+          },
+          "caf": {
+            "probes": 1207,
+            "n_failed_probe_detect": 0,
+            "n_exact_dup_excluded": 0,
+            "n_near_dup_excluded": 0,
+            "rank1": 74.48218724109363,
+            "top5": 82.4357912178956,
+            "top10": 84.09279204639603,
+            "strong": 39.18806959403479,
+            "possible_plus": 65.2029826014913,
+            "rank1_ci95": [
+              69.45633879286942,
+              79.87195363147649
+            ],
+            "top10_ci95": [
+              79.47133617311746,
+              89.00195573398102
+            ],
+            "top1_centroid_share_pct": 42.5,
+            "top1_photo_share_pct": 57.5,
+            "r1_centroid_share_pct": 37.26,
+            "caf_in_train_set": false
+          },
+          "agedb": {
+            "probes": 924,
+            "n_failed_probe_detect": 0,
+            "n_exact_dup_excluded": 0,
+            "n_near_dup_excluded": 0,
+            "rank1": 95.34632034632034,
+            "top5": 96.86147186147186,
+            "top10": 96.86147186147186,
+            "strong": 81.38528138528139,
+            "possible_plus": 92.96536796536796,
+            "rank1_ci95": [
+              93.83767111267112,
+              96.65235810261393
+            ],
+            "top10_ci95": [
+              95.57235421166307,
+              98.0498374864572
+            ],
+            "top1_centroid_share_pct": 64.94,
+            "top1_photo_share_pct": 35.06,
+            "r1_centroid_share_pct": 65.27
+          },
+          "calfw": {
+            "probes": 1368,
+            "n_failed_probe_detect": 0,
+            "n_exact_dup_excluded": 0,
+            "n_near_dup_excluded": 0,
+            "rank1": 93.12865497076024,
+            "top5": 93.64035087719299,
+            "top10": 93.78654970760235,
+            "strong": 91.00877192982456,
+            "possible_plus": 92.76315789473685,
+            "rank1_ci95": [
+              91.73976608187134,
+              94.51754385964912
+            ],
+            "top10_ci95": [
+              92.39766081871345,
+              95.02923976608187
+            ],
+            "top1_centroid_share_pct": 77.85,
+            "top1_photo_share_pct": 22.15,
+            "r1_centroid_share_pct": 78.65
+          }
+        },
+        "stranger_open_set": {
+          "n_strangers": 200,
+          "n_failed_detect": 0,
+          "fpir_strong_pct": 1.0,
+          "fpir_possible_plus_pct": 5.5,
+          "mean_max_llr": 0.1222,
+          "mean_p_nonmate": 0.478
+        },
+        "latency_ms_per_query": 15.57
+      },
+      "production_bundle": {
+        "calibrated_ready": true,
+        "caf_in_train_set": false,
+        "gallery_ids_total": 2806,
+        "gallery_ids_enrolled": 2806,
+        "fair_4_datasets_no_caf": {
+          "probes": 6507,
+          "n_failed_probe_detect": 0,
+          "n_exact_dup_excluded": 0,
+          "n_near_dup_excluded": 0,
+          "rank1": 80.42108498540034,
+          "top5": 89.303826648225,
+          "top10": 91.59366835715383,
+          "strong": 53.34255417242969,
+          "possible_plus": 67.41970185953589,
+          "rank1_ci95": [
+            78.31940526637241,
+            82.54308464364502
+          ],
+          "top10_ci95": [
+            90.18584311704323,
+            92.81882200347484
+          ],
+          "top1_centroid_share_pct": 64.79,
+          "top1_photo_share_pct": 35.21,
+          "r1_centroid_share_pct": 66.12
+        },
+        "all_5_datasets": {
+          "probes": 7714,
+          "n_failed_probe_detect": 0,
+          "n_exact_dup_excluded": 0,
+          "n_near_dup_excluded": 0,
+          "rank1": 79.491833030853,
+          "top5": 88.22919367383977,
+          "top10": 90.4200155561317,
+          "strong": 52.42416385792067,
+          "possible_plus": 66.69691470054447,
+          "rank1_ci95": [
+            77.41721062084915,
+            81.4650322774982
+          ],
+          "top10_ci95": [
+            89.01196589738518,
+            91.71988566785976
+          ],
+          "top1_centroid_share_pct": 61.28,
+          "top1_photo_share_pct": 38.72,
+          "r1_centroid_share_pct": 61.87,
+          "caf_in_train_set": false
+        },
+        "per_dataset": {
+          "fgnet": {
+            "probes": 463,
+            "n_failed_probe_detect": 0,
+            "n_exact_dup_excluded": 0,
+            "n_near_dup_excluded": 0,
+            "rank1": 93.73650107991361,
+            "top5": 95.68034557235421,
+            "top10": 97.40820734341253,
+            "strong": 82.07343412526998,
+            "possible_plus": 89.6328293736501,
+            "rank1_ci95": [
+              88.9393932090315,
+              97.88162882546739
+            ],
+            "top10_ci95": [
+              94.50788820566905,
+              99.57994112405878
+            ],
+            "top1_centroid_share_pct": 27.43,
+            "top1_photo_share_pct": 72.57,
+            "r1_centroid_share_pct": 24.42,
+            "age_gap_buckets": {
+              "<10": {
+                "probes": 227,
+                "rank1": 99.11894273127754,
+                "top5": 99.55947136563876,
+                "top10": 99.55947136563876,
+                "strong": 95.59471365638767
+              },
+              "10-19": {
+                "probes": 132,
+                "rank1": 97.72727272727273,
+                "top5": 99.24242424242425,
+                "top10": 99.24242424242425,
+                "strong": 81.06060606060606
+              },
+              ">=20": {
+                "probes": 104,
+                "rank1": 76.92307692307693,
+                "top5": 82.6923076923077,
+                "top10": 90.38461538461539,
+                "strong": 53.84615384615385
+              }
+            }
+          },
+          "ecaf": {
+            "probes": 3752,
+            "n_failed_probe_detect": 0,
+            "n_exact_dup_excluded": 0,
+            "n_near_dup_excluded": 0,
+            "rank1": 70.46908315565032,
+            "top5": 85.07462686567165,
+            "top10": 88.77931769722814,
+            "strong": 27.665245202558637,
+            "possible_plus": 49.33368869936034,
+            "rank1_ci95": [
+              67.38415427173922,
+              73.64726370017277
+            ],
+            "top10_ci95": [
+              86.6676047489589,
+              90.71986024033438
+            ],
+            "top1_centroid_share_pct": 64.61,
+            "top1_photo_share_pct": 35.39,
+            "r1_centroid_share_pct": 67.21
+          },
+          "caf": {
+            "probes": 1207,
+            "n_failed_probe_detect": 0,
+            "n_exact_dup_excluded": 0,
+            "n_near_dup_excluded": 0,
+            "rank1": 74.48218724109363,
+            "top5": 82.4357912178956,
+            "top10": 84.09279204639603,
+            "strong": 47.47307373653687,
+            "possible_plus": 62.800331400165696,
+            "rank1_ci95": [
+              69.45633879286942,
+              79.87195363147649
+            ],
+            "top10_ci95": [
+              79.47133617311746,
+              89.00195573398102
+            ],
+            "top1_centroid_share_pct": 42.34,
+            "top1_photo_share_pct": 57.66,
+            "r1_centroid_share_pct": 37.15,
+            "caf_in_train_set": false
+          },
+          "agedb": {
+            "probes": 924,
+            "n_failed_probe_detect": 0,
+            "n_exact_dup_excluded": 0,
+            "n_near_dup_excluded": 0,
+            "rank1": 95.34632034632034,
+            "top5": 96.86147186147186,
+            "top10": 96.86147186147186,
+            "strong": 86.25541125541125,
+            "possible_plus": 92.31601731601732,
+            "rank1_ci95": [
+              93.83767111267112,
+              96.65235810261393
+            ],
+            "top10_ci95": [
+              95.57235421166307,
+              98.0498374864572
+            ],
+            "top1_centroid_share_pct": 64.94,
+            "top1_photo_share_pct": 35.06,
+            "r1_centroid_share_pct": 65.27
+          },
+          "calfw": {
+            "probes": 1368,
+            "n_failed_probe_detect": 0,
+            "n_exact_dup_excluded": 0,
+            "n_near_dup_excluded": 0,
+            "rank1": 93.12865497076024,
+            "top5": 93.64035087719299,
+            "top10": 93.78654970760235,
+            "strong": 91.81286549707602,
+            "possible_plus": 92.69005847953217,
+            "rank1_ci95": [
+              91.73976608187134,
+              94.51754385964912
+            ],
+            "top10_ci95": [
+              92.39766081871345,
+              95.02923976608187
+            ],
+            "top1_centroid_share_pct": 77.85,
+            "top1_photo_share_pct": 22.15,
+            "r1_centroid_share_pct": 78.65
+          }
+        },
+        "stranger_open_set": {
+          "n_strangers": 200,
+          "n_failed_detect": 0,
+          "fpir_strong_pct": 1.0,
+          "fpir_possible_plus_pct": 4.5,
+          "mean_max_llr": 0.2671,
+          "mean_p_nonmate": 0.6013
+        },
+        "latency_ms_per_query": 15.14
+      }
+    }
+  },
+  "stage3_http_parity": {
+    "engine_key": "aimids_crossage",
+    "n_probes": 30,
+    "expected_people": 2806,
+    "http_calibration": "calibrated",
+    "http_asnorm_active": true,
+    "rank1_parity_count": 30,
+    "rank1_parity_pct": 100.0,
+    "max_llr_diff": 0.0,
+    "max_sim_diff": 0.0,
+    "http_latency_mean_ms": 136.99,
+    "http_latency_p95_ms": 139.05,
+    "mated_probe_count": 24,
+    "mated_http_rank1_hits": 18,
+    "all_passed": true,
+    "failures": [],
+    "exit_code": 0
+  }
+}

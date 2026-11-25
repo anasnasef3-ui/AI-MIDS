@@ -112,7 +112,8 @@ def register_photo(engine, store, person_id, src, age=None, face_index=None, pho
     if q["status"] not in ("ok", "warn"):
         return None, q
     path = photo_path if photo_path is not None else (src if isinstance(src, str) else None)
-    return store.add_photo(person_id, q["face"]["embedding"], photo_path=path, age=age), q
+    return store.add_photo(person_id, q["face"]["embedding"], photo_path=path, age=age,
+                           model=engine.model_name), q
 
 
 def draw_faces(img, faces, chosen=None):

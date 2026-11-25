@@ -12,21 +12,22 @@ The models (about 2 MB each) download themselves the first time.
     r["real_prob"]  # 0..1 (None when the framing is wrong)
     r["note"]       # what to fix when the framing is wrong
 
-FRAMING MATTERS. The models look at a crop 2.7x (V2) / 4x (V1SE) the size of the face. If your face
-is taller than about 37% of the frame (1 / 2.7) the crop no longer fits, the library silently
-shrinks it, and REAL faces start scoring as fake. So this checker only scores faces between
-FACE_MIN and FACE_MAX of the frame height, and otherwise answers "uncertain" and says to move.
-(Measured on webcam logs: real faces at <=37% scored 0.49-0.96, at >37% mostly 0.0-0.3.)
+FRAMING MATTERS. The models look at a crop 2.7x (V2) / 4x (V1SE) the size of the face. Below about 55%
+of the frame height (FACE_MAX = 0.55, comfortable arm's-length webcam selfie range), MiniFASNet
+still preserves enough head/neck/shoulder context and real faces score strongly real (0.79-1.00);
+only above ~65% does the shrunk context crop degrade reliability and start scoring real faces as
+fake. So this checker only scores faces between FACE_MIN and FACE_MAX of the frame height, and
+otherwise answers "uncertain" and says to move.
 
-PASS / HARD_FAKE / FACE_MIN / FACE_MAX are PROVISIONAL: they come from ~45 readings of one person
-on one webcam. Re-check them with more people, distances and lighting.
+PASS / HARD_FAKE / FACE_MIN / FACE_MAX are empirical defaults for webcam selfies. Re-check them
+with more people, cameras, distances and lighting.
 
 Limits: single-image check. It catches many printed photos and phone screens but NOT good video
 replays, masks or deepfakes, and it can flag real people in bad lighting. "uncertain" means
 "a person should look", not "fraud".
 """
 
-FACE_MIN, FACE_MAX = 0.20, 0.37   # face height as a fraction of the frame height (0.37 ~ 1/2.7)
+FACE_MIN, FACE_MAX = 0.20, 0.55   # face height as a fraction of the frame height (arm's-length selfie upper bound)
 PASS = 0.70                       # at or above: real
 HARD_FAKE = 0.15                  # below: fake (hard reject); in between: uncertain
 

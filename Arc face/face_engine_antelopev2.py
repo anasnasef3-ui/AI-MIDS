@@ -14,11 +14,17 @@ Drop-in replacement for FaceEngine:
 """
 import numpy as np
 import cv2
-from insightface.app import FaceAnalysis
 from insightface.utils import face_align
+
+try:
+    from face_engine import create_face_analysis, _app_uses_cuda
+except ImportError:
+    from .face_engine import create_face_analysis, _app_uses_cuda
 
 
 class FaceEngineAntelopeV2:
+    model_name = "antelopev2"   # tags every embedding this engine produces, so the store never mixes models
+
     def __init__(self, insightface_home="~/.insightface", use_gpu=True, det_size=(640, 640), use_tta=False):
         """
         Initializes FaceEngine with the antelopev2 model pack (Glint360K ResNet-100).
@@ -30,15 +36,16 @@ class FaceEngineAntelopeV2:
             use_tta: If True, uses Flip Test-Time Augmentation (averages original and horizontally
                      flipped face embeddings) for higher matching stability across age gaps.
         """
-        providers = ["CUDAExecutionProvider", "CPUExecutionProvider"] if use_gpu else ["CPUExecutionProvider"]
         self.use_tta = use_tta
-        self.app = FaceAnalysis(
+        self.app = create_face_analysis(
             name="antelopev2",
             root=insightface_home,
             allowed_modules=["detection", "recognition"],
-            providers=providers
+            use_gpu=use_gpu,
+            det_thresh=0.4,
+            det_size=det_size,
         )
-        self.app.prepare(ctx_id=0 if use_gpu else -1, det_thresh=0.4, det_size=det_size)
+        self.use_gpu = _app_uses_cuda(self.app)
         self.rec_model = self.app.models.get("recognition")
 
     @staticmethod

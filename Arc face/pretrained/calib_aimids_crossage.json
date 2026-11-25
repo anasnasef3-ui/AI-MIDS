@@ -1,0 +1,53 @@
+{
+  "schema_version": 2,
+  "model_name": "aimids_crossage",
+  "dim": 1024,
+  "cohort_hash": "4c62a6e2ee922163",
+  "proj_hash": "e85dd5472cb5a15e",
+  "proj_k": 5,
+  "photo_hybrid_weight": 0.35,
+  "cohort_size": 600,
+  "asnorm_top_k": 200,
+  "asnorm_std_floor": 0.05,
+  "qmf_weights": {
+    "asnorm_z": 0.7045978509563725,
+    "raw_sim": 0.033252257086490045,
+    "q_min": -0.028111453406098587,
+    "age_gap_scaled": 0.20383868448932332,
+    "has_age_gap": 0.1195853443726571
+  },
+  "qmf_bias": -2.1689875042760915,
+  "openset_n_grid": [
+    1,
+    50,
+    80,
+    150,
+    300,
+    600,
+    1000,
+    2000,
+    3000,
+    3910
+  ],
+  "openset_m_calib": 600,
+  "openset_gpd": {
+    "u": -1.6112316668033608,
+    "p_u": 0.05,
+    "xi": -0.061667020687888915,
+    "sigma_u": 0.42736854175211036,
+    "n_eff_c": 0.43886820469912124,
+    "n_eff_gamma": 1.05
+  },
+  "cove_n_identities": 1676,
+  "cove_n_pairs": 1403650,
+  "cohort_source": "lag_external_tar",
+  "cohort_filter": "lag_adult_only",
+  "fit_trials": 3541,
+  "fit_diagnostics": {
+    "cllr": 0.23611336639185482,
+    "cllr_min": 0.21300346168900947,
+    "cllr_cal": 0.023109904702845352,
+    "brier": 0.04328605763592421,
+    "ece": 0.02316435731698481
+  }
+}

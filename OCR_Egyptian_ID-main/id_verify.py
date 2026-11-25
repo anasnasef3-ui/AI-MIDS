@@ -163,12 +163,19 @@ def verify_id(id_image, selfie, engine, liveness=None):
 if __name__ == "__main__":
     args = [a for a in sys.argv[1:] if not a.startswith("--")]
     if not args:
-        sys.exit('Usage: python id_verify.py "ID.jpg" ["selfie.jpg"] [--no-liveness] [--antelopev2]')
+        sys.exit('Usage: python id_verify.py "ID.jpg" ["selfie.jpg"] [--no-liveness] [--antelopev2] [--aimids-ft]')
+    arc_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "Arc face"))
+    if arc_dir not in sys.path:
+        sys.path.insert(0, arc_dir)
+
+    use_aimids_ft = "--aimids-ft" in sys.argv or os.environ.get("AIMIDS_ENGINE", "").lower() in ("aimids_ft", "adaface_ft")
     use_antelope = "--antelopev2" in sys.argv or os.environ.get("AIMIDS_ENGINE", "").lower() == "antelopev2"
-    if use_antelope:
-        arc_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "Arc face"))
-        if arc_dir not in sys.path:
-            sys.path.insert(0, arc_dir)
+    use_tta = os.environ.get("AIMIDS_TTA", "1").lower() in ("1", "true", "yes")
+
+    if use_aimids_ft:
+        from face_engine_adaface_ft import FaceEngineAdaFaceFT
+        engine = FaceEngineAdaFaceFT(use_gpu=False, use_tta=use_tta)
+    elif use_antelope:
         from face_engine_antelopev2 import FaceEngineAntelopeV2
         engine = FaceEngineAntelopeV2(use_gpu=False)
     else:

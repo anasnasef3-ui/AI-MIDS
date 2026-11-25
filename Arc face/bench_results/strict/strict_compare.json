@@ -1,0 +1,321 @@
+{
+  "provenance": {
+    "timestamp_utc": "2026-11-24T15:12:25.726815+00:00",
+    "cli_args": {
+      "engines": "aimids_crossage,antelopev2",
+      "suites": "agedb30_official,calfw,fgnet,caf,ecaf",
+      "onnx": null,
+      "cpu": false,
+      "verify_sample": 32,
+      "bootstrap": 2000,
+      "seed": 0,
+      "out": "bench_results/strict"
+    },
+    "git_head": "316dec202b58d4b670eb0e0e5c9c3776f6982523",
+    "git_dirty_file_count": 53,
+    "versions": {
+      "python": "3.10.11",
+      "numpy": "1.26.4",
+      "onnxruntime": "1.20.2",
+      "scipy": "1.15.3",
+      "faiss": "1.15.1"
+    },
+    "engine_providers": {
+      "aimids_crossage": {
+        "app.recognition": [
+          "CUDAExecutionProvider",
+          "CPUExecutionProvider"
+        ],
+        "app.detection": [
+          "CUDAExecutionProvider",
+          "CPUExecutionProvider"
+        ],
+        "antelope.recognition": [
+          "CUDAExecutionProvider",
+          "CPUExecutionProvider"
+        ],
+        "antelope.detection": [
+          "CUDAExecutionProvider",
+          "CPUExecutionProvider"
+        ],
+        "adaface.ort_session": [
+          "CUDAExecutionProvider",
+          "CPUExecutionProvider"
+        ]
+      },
+      "antelopev2": {
+        "app.recognition": [
+          "CUDAExecutionProvider",
+          "CPUExecutionProvider"
+        ],
+        "app.detection": [
+          "CUDAExecutionProvider",
+          "CPUExecutionProvider"
+        ]
+      }
+    },
+    "model_artifacts": {
+      "aimids_adaface_ir101_ft_onnx": {
+        "path": "D:\\GRAD\\Project\\Main files\\Arc face\\pretrained\\aimids_adaface_ir101_ft.onnx",
+        "sha256": "376cbba7bc487c90a780a5fea49bf8a4a0397861859558c02d9e9f626041505e"
+      },
+      "custom_onnx": {
+        "path": null,
+        "sha256": null
+      },
+      "glintr100_onnx": {
+        "path": "C:\\Users\\Administrator/.insightface/models/antelopev2\\glintr100.onnx",
+        "sha256": "4ab1d6435d639628a6f3e5008dd4f929edf4c4124b1a7169e1048f9fef534cdf"
+      },
+      "scrfd_10g_bnkps_onnx": {
+        "path": "C:\\Users\\Administrator/.insightface/models/antelopev2\\scrfd_10g_bnkps.onnx",
+        "sha256": "5838f7fe053675b1c7a08b633df49e7af5495cee0493c7dcf6697200b85b5b91"
+      }
+    },
+    "calibration_bundles": {
+      "aimids_crossage": {
+        "path": "D:\\GRAD\\Project\\Main files\\Arc face\\pretrained\\calib_aimids_crossage.npz",
+        "sha256": "a8a3a4153aaaf8db783f6597a0f9736320931fcb64e3573340d85b84685886b6"
+      },
+      "antelopev2": {
+        "path": "D:\\GRAD\\Project\\Main files\\Arc face\\pretrained\\calib_antelopev2.npz",
+        "sha256": "be299566afd16c527df84246fdb4b0d8eb6060c4727620a697522ba785908535"
+      }
+    },
+    "protocol_hashes": {
+      "agedb30_official": {
+        "mat_sha256": "80202af016d5c393201e157466e7c5b7ccf0f220433eb688d4ceeb003b0df0b3",
+        "tar_sha256": "32c3008bea9436ca2528c2562e80800c6c35882dbf48d8bc79ce3b197871dfa0",
+        "pairs_manifest_sha256": "19eae6bc20585a2a418b8f9fa001f8e9b341b87d3109963c18d10ff80491196b"
+      },
+      "calfw": {
+        "pairs_calfw_sha256": "871a2f047d57754bd8ed176b9bbcdb42a7b9ba03cd839702c0a28dfdebc9f8fc",
+        "pairs_manifest_sha256": "885c02bf92f89ae6417541157416121696a507d4bfbbd6a76a0aba37e95fc676"
+      },
+      "fgnet": {
+        "manifest_sha256": "9286cdc5dcdadab459a2f35bba347f0599ee7e6bf669da2d4a08e01579f02dc3"
+      },
+      "caf": {
+        "cacd_zip_sha256": "21be545ba0cbeb7eab1d1425c925159aad354a6d4f4425a5a040147e20645b05",
+        "cacd_manifest_meta": {
+          "zip_path": "D:\\GRAD\\Project\\training\\custom_model-20261114T121928Z-1-001.zip",
+          "member_name": "custom_model/split_manifest_v2.csv.gz",
+          "splits_seen": [
+            "train",
+            "validation"
+          ],
+          "per_split_identities": {
+            "train": 1251,
+            "validation": 139
+          },
+          "total_identities": 1390
+        },
+        "manifest_sha256": "9f62581708ee7b81853d6489b2c3a3a5bedb0754b5906b3c8b0dc86b2b503ab7"
+      },
+      "ecaf": {
+        "name_list_sha256": "9b6c726a21e3532142b1cc1b5953d01ed69b680ff77d72971372c959e9b64c18",
+        "cacd_zip_sha256": "21be545ba0cbeb7eab1d1425c925159aad354a6d4f4425a5a040147e20645b05",
+        "cacd_manifest_meta": {
+          "zip_path": "D:\\GRAD\\Project\\training\\custom_model-20261114T121928Z-1-001.zip",
+          "member_name": "custom_model/split_manifest_v2.csv.gz",
+          "splits_seen": [
+            "train",
+            "validation"
+          ],
+          "per_split_identities": {
+            "train": 1251,
+            "validation": 139
+          },
+          "total_identities": 1390
+        },
+        "manifest_sha256": "42daeb616c77e6b39b47700b304a820720bb2bc763d2af33836d7dc320c61aa1"
+      }
+    }
+  },
+  "comparisons": {
+    "aimids_crossage_vs_antelopev2": {
+      "engine_a": "aimids_crossage",
+      "engine_b": "antelopev2",
+      "verification": {
+        "agedb30_official": {
+          "n": 6000,
+          "acc_a": 98.21666666666667,
+          "acc_b": 98.33333333333333,
+          "diff_pct": -0.11666666666666003,
+          "b": 2,
+          "c": 9,
+          "p_value": 0.0654296875,
+          "significant_p05": false
+        },
+        "calfw": {
+          "n": 6000,
+          "acc_a": 96.05,
+          "acc_b": 96.06666666666666,
+          "diff_pct": -0.01666666666666572,
+          "b": 2,
+          "c": 3,
+          "p_value": 1.0,
+          "significant_p05": false
+        }
+      },
+      "retrieval": {
+        "fgnet:default": {
+          "raw": {
+            "n": 463,
+            "acc_a": 96.76025917926566,
+            "acc_b": 96.32829373650108,
+            "diff_pct": 0.4319654427645787,
+            "b": 7,
+            "c": 5,
+            "p_value": 0.7744140625,
+            "significant_p05": false,
+            "n_shared_total": 463,
+            "n_excluded_dup_either": 0
+          },
+          "calibrated": {
+            "n": 463,
+            "acc_a": 96.11231101511879,
+            "acc_b": 95.8963282937365,
+            "diff_pct": 0.21598272138228936,
+            "b": 6,
+            "c": 5,
+            "p_value": 1.0,
+            "significant_p05": false,
+            "n_shared_total": 463,
+            "n_excluded_dup_either": 0
+          }
+        },
+        "caf:fully_unseen": {
+          "raw": {
+            "n": 1047,
+            "acc_a": 88.15663801337153,
+            "acc_b": 86.34192932187202,
+            "diff_pct": 1.8147086914995185,
+            "b": 24,
+            "c": 5,
+            "p_value": 0.0005461126565933228,
+            "significant_p05": true,
+            "n_shared_total": 1047,
+            "n_excluded_dup_either": 0
+          },
+          "calibrated": {
+            "n": 1047,
+            "acc_a": 87.39255014326648,
+            "acc_b": 85.67335243553008,
+            "diff_pct": 1.7191977077363987,
+            "b": 26,
+            "c": 8,
+            "p_value": 0.0029350556433200836,
+            "significant_p05": true,
+            "n_shared_total": 1047,
+            "n_excluded_dup_either": 0
+          }
+        },
+        "caf:model_strict": {
+          "raw": {
+            "n": 1866,
+            "acc_a": 83.44051446945338,
+            "acc_b": 81.56484458735262,
+            "diff_pct": 1.8756698821007518,
+            "b": 51,
+            "c": 16,
+            "p_value": 2.168923876071706e-05,
+            "significant_p05": true,
+            "n_shared_total": 1866,
+            "n_excluded_dup_either": 0
+          },
+          "calibrated": {
+            "n": 1866,
+            "acc_a": 83.06538049303323,
+            "acc_b": 81.13612004287245,
+            "diff_pct": 1.9292604501607826,
+            "b": 51,
+            "c": 15,
+            "p_value": 1.0096127351113507e-05,
+            "significant_p05": true,
+            "n_shared_total": 1866,
+            "n_excluded_dup_either": 0
+          }
+        },
+        "ecaf_official:model_strict": {
+          "raw": {
+            "n": 3658,
+            "acc_a": 83.89830508474576,
+            "acc_b": 80.94587206123565,
+            "diff_pct": 2.9524330235101104,
+            "b": 143,
+            "c": 35,
+            "p_value": 1.0758722094411622e-16,
+            "significant_p05": true,
+            "n_shared_total": 3658,
+            "n_excluded_dup_either": 0
+          },
+          "calibrated": {
+            "n": 3658,
+            "acc_a": 83.40623291416074,
+            "acc_b": 79.90705303444506,
+            "diff_pct": 3.4991798797156832,
+            "b": 157,
+            "c": 29,
+            "p_value": 1.8429110801236742e-22,
+            "significant_p05": true,
+            "n_shared_total": 3658,
+            "n_excluded_dup_either": 0
+          }
+        },
+        "ecaf_all:fully_unseen": {
+          "raw": {
+            "n": 291,
+            "acc_a": 85.56701030927834,
+            "acc_b": 83.8487972508591,
+            "diff_pct": 1.7182130584192379,
+            "b": 8,
+            "c": 3,
+            "p_value": 0.2265625,
+            "significant_p05": false,
+            "n_shared_total": 291,
+            "n_excluded_dup_either": 0
+          },
+          "calibrated": {
+            "n": 291,
+            "acc_a": 84.87972508591065,
+            "acc_b": 83.50515463917526,
+            "diff_pct": 1.3745704467353903,
+            "b": 8,
+            "c": 4,
+            "p_value": 0.3876953125,
+            "significant_p05": false,
+            "n_shared_total": 291,
+            "n_excluded_dup_either": 0
+          }
+        },
+        "ecaf_all:model_strict": {
+          "raw": {
+            "n": 3820,
+            "acc_a": 83.7434554973822,
+            "acc_b": 80.73298429319372,
+            "diff_pct": 3.0104712041884767,
+            "b": 150,
+            "c": 35,
+            "p_value": 3.695697583110019e-18,
+            "significant_p05": true,
+            "n_shared_total": 3820,
+            "n_excluded_dup_either": 0
+          },
+          "calibrated": {
+            "n": 3820,
+            "acc_a": 83.16753926701571,
+            "acc_b": 79.68586387434556,
+            "diff_pct": 3.481675392670155,
+            "b": 166,
+            "c": 33,
+            "p_value": 1.5613432390208212e-22,
+            "significant_p05": true,
+            "n_shared_total": 3820,
+            "n_excluded_dup_either": 0
+          }
+        }
+      }
+    }
+  }
+}

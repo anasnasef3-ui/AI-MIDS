@@ -33,15 +33,20 @@ my_photos/
 **/my_photos/
 OCR_Egyptian_ID-main/hoz.jpg
 OCR_Egyptian_ID-main/hoz1.jpg
+OCR_Egyptian_ID-main/ID.jpg
 
 # Large Model Checkpoints & Pretrained Weights (>100MB limit on GitHub)
 Arc face/pretrained/backbone.pth
 Arc face/pretrained/*.pth
+Arc face/pretrained/*.onnx
 
 # Installers and Zip Archives
 *.exe
 *.zip
 *.npz
+!Arc face/pretrained/calib_aimids_crossage.npz
+!Arc face/pretrained/calib_antelopev2.npz
+!Arc face/pretrained/calib_aimids_scratch_ir50_crossage.npz
 Arc face/pretrained/*.exe
 
 # Intermediate / Debug Outputs
@@ -50,6 +55,12 @@ OCR_Egyptian_ID-main/extracted_photo.png
 OCR_Egyptian_ID-main/debug_nid_crop.png
 OCR_Egyptian_ID-main/liveness_log.csv
 *.log
+
+# Doctor demo build artifacts (held-back photos ~134 MB, evaluator output)
+demo_probes/
+demo_results/
+demo_crossage_work/
+demo_results_calibrated/
 
 # Keep required production YOLO models
 !OCR_Egyptian_ID-main/best.pt
@@ -68,3 +79,4 @@ ENV/
 .vscode/
 .agents/
 .gemini/
+.ua/

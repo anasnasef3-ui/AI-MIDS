@@ -1,0 +1,56 @@
+{
+  "schema_version": 2,
+  "model_name": "aimids_ft",
+  "dim": 512,
+  "cohort_hash": "c972822d158ebcb1",
+  "proj_hash": "93954c2531d4499c",
+  "proj_k": 5,
+  "photo_hybrid_weight": 0.35,
+  "cohort_size": 600,
+  "asnorm_top_k": 200,
+  "asnorm_std_floor": 0.05,
+  "qmf_weights": {
+    "asnorm_z": 0.6651571280161485,
+    "raw_sim": 0.03330564789414355,
+    "q_min": 0.006713292351299093,
+    "age_gap_scaled": 0.0,
+    "has_age_gap": 0.0
+  },
+  "qmf_bias": -2.1396648256330133,
+  "openset_n_grid": [
+    1,
+    50,
+    80,
+    150,
+    300,
+    600,
+    1000,
+    2000,
+    2806
+  ],
+  "openset_m_calib": 350,
+  "openset_gpd": {
+    "u": -1.5177165746688843,
+    "p_u": 0.05,
+    "xi": -0.10275118329085771,
+    "sigma_u": 0.4714114165593749,
+    "n_eff_c": 0.2517467653811487,
+    "n_eff_gamma": 1.05
+  },
+  "cove_n_identities": 473,
+  "cove_n_pairs": 111628,
+  "cohort_source": "lag_external_tar",
+  "cohort_filter": "lag_adult_only",
+  "calibration_split": "matched_calfw_folds_01_nonmates_23",
+  "fit_trials": 744,
+  "nonmate_calib_probes": 350,
+  "gallery_n_max": 2806,
+  "fit_diagnostics": {
+    "cllr": 0.29643008759599593,
+    "cllr_min": 0.2446758580983051,
+    "cllr_cal": 0.05175422949769082,
+    "brier": 0.06241013345088106,
+    "ece": 0.05683304370804653
+  },
+  "onnx_stem": "aimids_scratch_ir50_crossage"
+}
